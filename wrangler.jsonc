@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "flukah-party",
+  "name": "flouka-party",
   "main": ".open-next/worker.js",
   "compatibility_date": "2024-09-23",
   "compatibility_flags": [
@@ -21,11 +21,6 @@
     "NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET": "payment-screenshots",
     "ADMIN_EMAIL": "abud@admin.fun",
     "NEXT_PUBLIC_SITE_URL": "https://flukah-party.abud.fun"
-  },
-  "secrets": {
-    "required": [
-      "SUPABASE_SECRET_KEY"
-    ]
   },
   "assets": {
     "directory": ".open-next/assets",
