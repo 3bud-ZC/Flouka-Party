@@ -1,15 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseAdminClient, verifyAdminToken, isSupabaseConfigured } from "@/lib/supabase";
+import {
+  getSupabaseAdminClient,
+  verifyAdminToken,
+  isSupabaseConfigured,
+  isSupabaseAdminConfigured,
+} from "@/lib/supabase";
+
+function getAdminClientOrError() {
+  if (!isSupabaseConfigured()) {
+    return { client: null, response: NextResponse.json({ success: false, message: "Supabase public configuration is missing." }, { status: 503 }) };
+  }
+  if (!isSupabaseAdminConfigured()) {
+    return { client: null, response: NextResponse.json({ success: false, message: "Supabase server secret is not configured." }, { status: 503 }) };
+  }
+  const client = getSupabaseAdminClient();
+  if (!client) {
+    return { client: null, response: NextResponse.json({ success: false, message: "Supabase admin client could not be initialized." }, { status: 503 }) };
+  }
+  return { client, response: null };
+}
 
 export async function GET(req: NextRequest) {
   try {
-    if (!isSupabaseConfigured()) {
-      return NextResponse.json(
-        { success: false, message: "Supabase database is not configured." },
-        { status: 503 }
-      );
-    }
-
     const authHeader = req.headers.get("authorization");
     const user = await verifyAdminToken(authHeader);
 
@@ -20,7 +32,9 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const supabase = getSupabaseAdminClient()!;
+    const { client: supabase, response } = getAdminClientOrError();
+    if (!supabase) return response!;
+
     const { data: reservations, error } = await supabase
       .from("reservations")
       .select("*")
@@ -45,13 +59,6 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    if (!isSupabaseConfigured()) {
-      return NextResponse.json(
-        { success: false, message: "Supabase database is not configured." },
-        { status: 503 }
-      );
-    }
-
     const authHeader = req.headers.get("authorization");
     const user = await verifyAdminToken(authHeader);
 
@@ -72,7 +79,9 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const supabase = getSupabaseAdminClient()!;
+    const { client: supabase, response } = getAdminClientOrError();
+    if (!supabase) return response!;
+
     const { data, error } = await supabase
       .from("reservations")
       .update({ status, updated_at: new Date().toISOString() })
