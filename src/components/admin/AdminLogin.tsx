@@ -83,7 +83,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
               type="email"
               id="email"
               required
-              placeholder="admin@flukahparty.com"
+              placeholder="abud@admin.fun"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3.5 py-2.5 bg-parchment border-2 border-ink font-mono text-base text-ink placeholder:text-ink/40 focus:outline-none focus:bg-white focus:shadow-stamp"
