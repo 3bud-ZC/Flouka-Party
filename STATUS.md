@@ -1,119 +1,129 @@
 # Flukah Party — Final Production Status & Deployment Handoff
 
 **Project Name:** Flukah Party Event Website & Organizer Deck  
-**Authoritative Repository:** [https://github.com/3bud-ZC/Flouka-Party.git](https://github.com/3bud-ZC/Flouka-Party.git)  
+**Authoritative Repository:** https://github.com/3bud-ZC/Flouka-Party.git  
 **Target Branch:** `main`  
 **Ticket Price:** `550 EGP / guest`  
-**Status:** Production Ready • Real Payment Credentials Configured • Bank Transfer Removed • Supabase Connected • Admin Access Locked to Designated Email • Cloudflare Workers Ready  
+**Status:** Production code ready • Supabase connected • Admin created and restricted • Cloudflare repository configuration hardened • Final live deploy pending server secret / deployment verification  
 **Last Updated:** August 20, 2026  
 
 ---
 
-## 1. Production Payment Configuration (Single Source of Truth: `src/lib/config.ts`)
+## 1. Production Payment Configuration
 
-The project exposes **exactly two** official payment channels:
+The project exposes exactly two payment channels:
 
-### 1. InstaPay
-* **Display Label:** `INSTAPAY`
-* **Account Identifier:** `abyio99@instapay`
-* **Copy Button Action:** Copies exactly `abyio99@instapay`
-
-### 2. Vodafone Cash
-* **Display Label:** `VODAFONE CASH`
-* **Wallet Display:** `011 05317095`
-* **Copy Button Action:** Copies normalized `01105317095`
-
-### Bank Transfer Removal
-* Bank Transfer and all legacy placeholder IBANs/banks have been removed from types, configuration, payment cards, reservation form, backend validation, uploader hints, admin displays, and documentation.
+- **InstaPay:** `abyio99@instapay`
+- **Vodafone Cash:** display `011 05317095`, copy value `01105317095`
+- Bank Transfer / IBAN support has been removed from UI, validation, types, admin display, and documentation.
+- Ticket price remains `550 EGP / guest`.
 
 ---
 
-## 2. Dynamic Pricing Matrix (550 EGP / Guest)
+## 2. Supabase Production State
 
-* **1 Guest:** `550 EGP`
-* **2 Guests:** `1,100 EGP`
-* **3 Guests:** `1,650 EGP`
-* **4 Guests:** `2,200 EGP`
-* **5 Guests:** `2,750 EGP`
-* **6 Guests:** `3,300 EGP`
-* **7 Guests:** `3,850 EGP`
-* **8 Guests:** `4,400 EGP`
-* **9 Guests:** `4,950 EGP`
-* **10 Guests:** `5,500 EGP`
-
----
-
-## 3. Mobile-First & Visual QA Verification
-
-* **Viewport Range:** Tested and verified across `320px`, `360px`, `375px`, `390px`, `393px`, `414px`, `430px`, `768px`, `1024px`, `1440px`.
-* **Payment Layout:**
-  - **Mobile:** Two full-width stacked printed ticket cards with clear selection highlights, min-44px tap targets, and visible copy confirmation.
-  - **Desktop:** Balanced 2-column editorial layout without empty legacy slots.
-* **Form & Typography:**
-  - Form inputs use `text-base` (>=16px) to eliminate iOS auto-zoom behavior.
-  - Sticky mobile CTA respects iPhone safe-area padding and auto-hides when the reservation form is in view.
+- Production project URL: `https://ylhhvkbdfytmitkcfoac.supabase.co`
+- `public.reservations` exists with RLS enabled.
+- `payment-screenshots` exists as a **PRIVATE** Storage bucket.
+- Payment screenshots are exposed to the organizer only through short-lived signed URLs.
+- Admin email: `abud@admin.fun`.
+- The Supabase Auth user for `abud@admin.fun` exists and is email-confirmed.
+- Reservation reads / updates / deletes are restricted to the designated admin email.
+- Private screenshot reads / deletes are restricted to the designated admin email.
+- Database payment-method constraint accepts only `instapay` and `vodafone_cash`.
+- Supabase Security Advisor was clean after the hardening migration.
 
 ---
 
-## 4. Security & Supabase Architecture
+## 3. Supabase Key Handling
 
-* **Production Supabase Project:** Connected and healthy.
-* **Table:** `public.reservations` exists with RLS enabled.
-* **Storage:** Bucket `payment-screenshots` is **PRIVATE** (`public = false`) with 10MB limit and image MIME filters.
-* **Signed URLs:** Organizer deck generates temporary 60-second signed URLs on demand via protected `/api/admin/signed-url`.
-* **Designated Admin Email:** `abud@admin.fun`.
-* **Admin API Guard:** `verifyAdminToken()` now rejects authenticated users whose email does not match the designated admin email.
-* **RLS:**
-  - Anonymous/public users can insert reservations only.
-  - Reservation reads/updates/deletes are restricted to the designated admin email.
-  - Private payment screenshot reads/deletes are restricted to the designated admin email.
-* **Payment Method DB Constraint:** Only `instapay` and `vodafone_cash` are accepted.
-* **Security Advisor:** No remaining security lints after production hardening.
-* **Service Role Key:** Must remain server-side only and must never be committed.
-* **Migration:** `supabase/migrations/002_restrict_admin_email.sql` records the production hardening changes in source control.
+`src/lib/supabase.ts` supports:
+
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as the preferred browser/public key.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` as a legacy public-key fallback.
+- `SUPABASE_SECRET_KEY` as the preferred server-only privileged key.
+- `SUPABASE_SERVICE_ROLE_KEY` as a legacy server-only fallback.
+
+The server/admin client **never falls back to the public publishable key**.
+
+A real Supabase server secret is mandatory for reservation screenshot upload and organizer APIs.
 
 ---
 
-## 5. Required Production Environment Variables
+## 4. Cloudflare / Build Configuration
 
-Set these in Cloudflare environment variables/secrets or `.env.local`:
+The repository is configured for Cloudflare Workers through OpenNext.
+
+### Build commands
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-publishable-or-legacy-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-or-secret-key
-ADMIN_EMAIL=abud@admin.fun
-NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET=payment-screenshots
-NEXT_PUBLIC_SITE_URL=https://your-production-url.example
+npm run build:worker
+npm run deploy:worker
 ```
 
-Do not commit real secret values.
+### Repository configuration
+
+- `package.json` pins the Cloudflare adapter command to `@opennextjs/cloudflare@0.6.6`, matching the current Next.js 14 project line.
+- `open-next.config.ts` contains the required Cloudflare overrides.
+- `wrangler.jsonc` points to `.open-next/worker.js` and `.open-next/assets`.
+- `wrangler.jsonc` now includes all **non-secret** Supabase/runtime values directly.
+- `.env.production` now includes the safe public Supabase values so Next.js has them during the Cloudflare build even when the Cloudflare UI reports no build variables.
+- `.nvmrc` pins Node.js `20.18.0` for a stable Next.js 14 / OpenNext build environment.
+
+No Supabase privileged secret is committed to the repository.
 
 ---
 
-## 6. Build & Test Verification Results
+## 5. Production Environment
 
-| Gate / Command | Status | Result |
-| :--- | :--- | :--- |
-| `npx tsc --noEmit` | **PASS** | 0 TypeScript errors (last verified build pass) |
-| `npm run lint` | **PASS** | 0 ESLint warnings or errors (last verified build pass) |
-| `npm run build` | **PASS** | Next.js production build generated successfully (last verified build pass) |
-| `OpenNext / Wrangler` | **PASS** | `wrangler.jsonc` & `open-next.config.ts` configured |
-| Supabase schema / RLS review | **PASS** | Production project inspected directly |
-| Supabase Security Advisor | **PASS** | No current security lints |
+Safe public values are already committed through `.env.production` / `wrangler.jsonc`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://ylhhvkbdfytmitkcfoac.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<configured publishable key>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<same public compatibility key>
+NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET=payment-screenshots
+ADMIN_EMAIL=abud@admin.fun
+```
+
+The deployment platform still needs exactly one privileged Supabase server secret configured securely:
+
+```bash
+SUPABASE_SECRET_KEY=<real Supabase secret key>
+```
+
+Do **not** use the `sb_publishable_...` value as `SUPABASE_SECRET_KEY` or `SUPABASE_SERVICE_ROLE_KEY`.
+
+After the first successful deployment, set:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://<final-workers-or-custom-domain>
+```
+
+and redeploy so OpenGraph metadata uses the final public URL.
+
+---
+
+## 6. Last Verified Quality Gates
+
+| Gate | Status |
+| --- | --- |
+| TypeScript | PASS in previous production pass |
+| ESLint | PASS in previous production pass |
+| Next.js production build | PASS in previous production pass |
+| Supabase schema / RLS | PASS |
+| Supabase Security Advisor | PASS |
+| Mobile QA | PASS in previous production pass |
+| Cloudflare live deployment | PENDING re-run after latest repo fixes |
 
 ---
 
 ## 7. Remaining Production Actions
 
-1. Create the Supabase Auth organizer user with email `abud@admin.fun` and a strong password; the user does not currently exist in `auth.users`.
-2. Add the real Supabase URL, publishable/anon key, and server-only service-role/secret key to the deployment environment.
-3. Connect `3bud-ZC/Flouka-Party` to Cloudflare Workers and deploy.
-4. Set `NEXT_PUBLIC_SITE_URL` to the final Cloudflare/custom-domain URL.
-5. Run one real end-to-end test reservation, verify it in `/admin`, open its private payment screenshot, update status, then delete the test data.
+1. Configure the real `SUPABASE_SECRET_KEY` as a Cloudflare Worker secret if it is not already present.
+2. Trigger a fresh Cloudflare deployment from the latest `main` commit — do not retry an old failed commit.
+3. Record the final public Workers/custom-domain URL in `NEXT_PUBLIC_SITE_URL` and redeploy once.
+4. Run one end-to-end test reservation: submit -> private screenshot upload -> admin login -> signed screenshot view -> confirm/reject.
+5. Delete the test reservation and test screenshot after verification.
 
----
-
-## 8. Cloudflare Deployment
-
-The repository is prepared for Cloudflare Workers/OpenNext deployment. Current ChatGPT integrations do not expose a Cloudflare account connector, so the initial Cloudflare account/repository connection and secret entry must be completed from the Cloudflare dashboard or Wrangler authentication. After GitHub is connected, subsequent pushes can deploy automatically.
+No additional feature development is required for launch.
