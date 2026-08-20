@@ -22,6 +22,11 @@
     "ADMIN_EMAIL": "abud@admin.fun",
     "NEXT_PUBLIC_SITE_URL": "https://flukah-party.abud.fun"
   },
+  "secrets": {
+    "required": [
+      "SUPABASE_SECRET_KEY"
+    ]
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
