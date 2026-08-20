@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseAdminClient, isSupabaseConfigured } from "@/lib/supabase";
+import { getSupabaseAdminClient, isSupabaseAdminConfigured, isSupabaseConfigured } from "@/lib/supabase";
 import { ReservationApiResponse } from "@/lib/types";
 import { eventConfig } from "@/lib/config";
 
@@ -39,7 +39,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<ReservationAp
       errors.guestCount = "Guest count must be between 1 and 10.";
     }
 
-    // Strict validation: paymentMethod must match one of the configured production payment methods
     const allowedPaymentMethods = eventConfig.paymentMethods.map((m) => m.id as string);
     if (!paymentMethod || !allowedPaymentMethods.includes(paymentMethod)) {
       errors.paymentMethod = "Please select a valid payment method (InstaPay or Vodafone Cash).";
@@ -52,7 +51,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ReservationAp
       if (!allowedTypes.includes(screenshotFile.type)) {
         errors.paymentScreenshot = "Invalid file type. Only JPG, PNG, or WEBP images are accepted.";
       }
-      const maxSizeBytes = 10 * 1024 * 1024; // 10MB
+      const maxSizeBytes = 10 * 1024 * 1024;
       if (screenshotFile.size > maxSizeBytes) {
         errors.paymentScreenshot = "File size exceeds 10MB limit.";
       }
@@ -69,22 +68,35 @@ export async function POST(req: NextRequest): Promise<NextResponse<ReservationAp
       );
     }
 
-    // Check if Supabase is configured
     if (!isSupabaseConfigured()) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Database connection is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to enable reservation storage.",
+          message: "Public Supabase configuration is missing.",
         },
         { status: 503 }
       );
     }
 
-    const supabase = getSupabaseAdminClient()!;
-    const bookingRef = generateBookingReference();
+    if (!isSupabaseAdminConfigured()) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Server-side Supabase secret is not configured.",
+        },
+        { status: 503 }
+      );
+    }
 
-    // 1. Upload screenshot to private Supabase Storage
+    const supabase = getSupabaseAdminClient();
+    if (!supabase) {
+      return NextResponse.json(
+        { success: false, message: "Server-side Supabase client could not be initialized." },
+        { status: 503 }
+      );
+    }
+
+    const bookingRef = generateBookingReference();
     const bucketName = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET || "payment-screenshots";
     const fileExt = screenshotFile!.name.split(".").pop() || "jpg";
     const filePath = `${bookingRef}/${Date.now()}.${fileExt}`;
@@ -108,8 +120,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<ReservationAp
       );
     }
 
-    // 2. Insert record into Supabase PostgreSQL table `reservations`
-    // We store the storage relative filePath in payment_screenshot_url for secure signed URL retrieval
     const { data: reservationData, error: dbError } = await supabase
       .from("reservations")
       .insert({
