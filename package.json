@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:worker": "opennextjs-cloudflare",
-    "preview": "opennextjs-cloudflare && wrangler dev",
-    "deploy": "opennextjs-cloudflare && wrangler deploy"
+    "build:worker": "npx @opennextjs/cloudflare@1.20.2 build",
+    "preview": "npx @opennextjs/cloudflare@1.20.2 build && npx @opennextjs/cloudflare@1.20.2 preview",
+    "deploy": "npx @opennextjs/cloudflare@1.20.2 build && npx @opennextjs/cloudflare@1.20.2 deploy -- --keep-vars",
+    "deploy:worker": "npx @opennextjs/cloudflare@1.20.2 deploy -- --keep-vars"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.1",
