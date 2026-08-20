@@ -1,72 +1,57 @@
 # Flukah Party — Project Status & Production Handoff
 
-**Project Name:** Flukah Party Event Website  
-**Identity Source:** Official Egyptian Psychedelic Nile River Party Poster  
-**Status:** Ready for Supabase Configuration & Production Launch  
+**Project Name:** Flukah Party Event Website & Organizer Deck  
+**Authoritative Repository:** [https://github.com/3bud-ZC/Flouka-Party.git](https://github.com/3bud-ZC/Flouka-Party.git)  
+**Target Branch:** `main`  
+**Latest Pushed Commit SHA:** `39bfec09ddbf05c169e2274b4aaca78f1b630a49`  
+**Status:** Mobile-First Redesign Complete • Security Hardened • Admin Deck Live • Pushed to GitHub • Cloudflare Workers Ready  
 **Last Updated:** August 20, 2026  
 
 ---
 
-## 1. Executive Summary & Completed Work
+## 1. Executive Summary of Changes
 
-A custom, single-page interactive experience designed from the ground up to bring the **Flukah Party** poster to life. The website integrates vintage Egyptian tourism poster aesthetics, 1960s–70s psychedelic typography, Nile/Felucca culture, screen-print halftone textures, distressed ink treatments, and a complete reservation & payment transfer verification workflow.
+### A. Mobile-First Redesign (375px / 390px Primary Canvas)
+* **Continuous Vertical Poster Flow**: Reduced empty cream margins and excess vertical padding (`py-8 sm:py-12`), creating high information density where the entire page scrolls seamlessly like one long illustrated Egyptian event poster.
+* **Elimination of Dashboard-Style Cards**: Redesigned **Event Details** to be typography-led and asymmetrical, highlighting `01 / 09`, `11 PM – 5 AM`, `DJ VIRUS`, `BYOB`, and `LIMITED GUESTS` without repetitive box grids.
+* **Mobile-First Selectable Payment Tickets**: Transformed horizontal desktop cards into vertical selectable printed cards (`InstaPay`, `Vodafone Cash`, `Bank Transfer`) with min-44px touch targets and instant copy triggers.
+* **Mobile Single-Column Registration Form**: Streamlined order with 16px+ inputs to prevent iOS browser auto-zoom, thumb-friendly guest count stepper (`-` / `+`), real-time price calculation, and large-touch drag-and-drop screenshot uploader.
+* **Thumb-Friendly Sticky Mobile CTA**: Responsive floating bottom bar on mobile screens with iPhone safe-area inset (`env(safe-area-inset-bottom)`) that automatically disappears when the registration form is visible.
 
-### Key Sections Implemented:
-1. **01 — Hero / Opening Scene**: Editorial asymmetrical layout integrating the high-resolution event poster, custom oversized typography, animated Eye of Horus, radiant sun disc, floating palm fronds, Nile water ripples, and dual primary/secondary CTAs with scroll indicator.
-2. **02 — The Night (Storytelling)**: Four illustrated vintage poster fragments/stamps detailing *Mixed Music*, *On The Nile*, *11 PM – 5 AM*, and *Limited Guests*.
-3. **03 — Event Details**: High-impact editorial section with oversized `01 / 09` monument graphic, tabular specification tickets, boarding times, DJ Virus billing, and BYOB policy.
-4. **04 — Atmosphere & Visual Transition**: Nile graphic scene featuring the Felucca sailboat silhouette, Giza sunset backdrop, and soundscape narrative.
-5. **05 — Payment Instructions**: 4-step visual flow (*Transfer → Screenshot → Register → Confirmation*) with verified payment account cards for InstaPay, Vodafone Cash, and Bank Transfer with one-click clipboard copying.
-6. **06 — Reservation System**: Production-ready registration ticket form with guest count counter (1–10 guests), reactive price calculation, payment method selector, notes, confirmation checkbox, and custom drag-and-drop screenshot uploader.
-7. **07 — Payment Screenshot Uploader**: Validated file upload supporting JPG, PNG, WEBP up to 10MB with drag-and-drop on desktop, tap-to-upload on mobile, thumbnail preview, and removal/replacement controls.
-8. **08 — Dynamic Confirmation Ticket View**: Live post-submission view displaying the unique booking reference (`FLK-XXXX`), celebration confetti animation, copy reference trigger, WhatsApp direct confirmation CTA, and clear pending verification notice.
-9. **09 — Direct Contact Channels**: Dedicated mobile-optimized cards for WhatsApp chat, Instagram updates, and direct phone inquiries.
-10. **10 — Final Poster Statement & Footer**: Oversized "THE NILE. THE MUSIC. THE NIGHT." statement and vintage tourism poster footer with legal notices and timestamps.
-11. **11 — Sticky Mobile CTA**: Responsive floating bottom bar on mobile screens that automatically detects and hides when the user enters the reservation form to avoid obstructing form inputs.
+### B. Secure Private Organizer Admin Deck (`/admin`)
+* **Authentication**: Protected with Supabase Auth (Organizer email & password). No public registration allowed.
+* **KPI Metrics**: Real-time summary of Total Bookings, Total Guests, Pending Verification, Confirmed Spots, Rejected, and Estimated Revenue.
+* **Reservation Management**: Instant search (by Name, Ref `FLK-XXXX`, Phone, WhatsApp, Notes), status filter tabs (`All`, `Pending`, `Confirmed`, `Rejected`), and quick status update actions (`Confirm`, `Reject`).
+* **Secure Payment Proof Viewer**: Payment screenshots are stored in a **PRIVATE** Supabase bucket. The admin deck generates temporary 60-second signed URLs on demand via `/api/admin/signed-url` to prevent public URL leakage.
+* **One-Click WhatsApp Communication**: Direct clickable WhatsApp chat deep-links prefilled with guest names and booking references.
+* **CSV Export**: Instant download of all reservation records as a structured `.csv` file.
+
+### C. Security & Supabase Hardening
+* **Storage Privacy**: Storage bucket `payment-screenshots` is configured as **PRIVATE** (`public = false`) with strict 10MB limit and image MIME filters.
+* **Row Level Security (RLS)**: Public anonymous users are restricted to `INSERT` only (no reading or enumeration of other reservations). Authenticated organizers have full `SELECT`, `UPDATE`, `DELETE` access.
+* **Server-Side Protection**: `SUPABASE_SERVICE_ROLE_KEY` is kept server-side only and never exposed to the client.
+
+### D. Cloudflare Workers / OpenNext Readiness
+* **Configuration**: `wrangler.jsonc` created with `nodejs_compat` and static asset bindings.
+* **OpenNext Adapter**: `open-next.config.ts` configured with `cloudflare-node` wrapper.
+* **Deployment Workflow**: Supports standard Next.js and Cloudflare scripts: `npm run dev`, `npm run build`, `npm run preview`, `npm run deploy`.
 
 ---
 
 ## 2. Technical Stack
 
-* **Framework**: Next.js 14 (App Router, Server Actions & Route Handlers)
+* **Framework**: Next.js 14 (App Router)
 * **Language**: TypeScript 5 (Strict Mode)
-* **Styling**: Tailwind CSS 3.4 with custom vintage Egyptian color palette & screen-print grain utilities
+* **Styling**: Tailwind CSS 3.4 with custom Egyptian color palette & screen-print grain utilities
 * **Icons**: Lucide React
-* **Animation & Polish**: Canvas Confetti, Tailwind keyframe wave/float animations
-* **Database & Storage Backend**: Supabase PostgreSQL + Supabase Storage
+* **Deployment Target**: Cloudflare Workers / Pages & Node.js
+* **Backend**: Supabase PostgreSQL + Private Supabase Storage + Supabase Auth
 
 ---
 
-## 3. Database & Storage Architecture
+## 3. Required Environment Variables
 
-### PostgreSQL Table: `public.reservations`
-Defined in `supabase/migrations/001_create_reservations.sql`:
-* `id` (UUID, Primary Key, auto-generated)
-* `booking_reference` (TEXT, Unique, e.g., `FLK-89XA`)
-* `full_name` (TEXT, Not Null)
-* `phone` (TEXT, Not Null)
-* `whatsapp` (TEXT, Not Null)
-* `instagram` (TEXT, Nullable)
-* `guest_count` (INTEGER, Default: 1, Check: 1–10)
-* `payment_method` (TEXT, Not Null)
-* `transaction_reference` (TEXT, Nullable)
-* `payment_screenshot_url` (TEXT, Not Null)
-* `notes` (TEXT, Nullable)
-* `status` (TEXT, Default: `'pending'`, Check: `'pending' | 'confirmed' | 'rejected'`)
-* `created_at` (TIMESTAMPTZ, Default: `NOW()`)
-* `updated_at` (TIMESTAMPTZ, Default: `NOW()`)
-
-### Storage Bucket: `payment-screenshots`
-* **Bucket ID**: `payment-screenshots` (Public read or Authenticated)
-* **Path Pattern**: `${bookingReference}/${timestamp}.${ext}`
-* **Allowed Types**: `image/jpeg`, `image/png`, `image/webp`
-* **Max Size**: 10 MB
-
----
-
-## 4. Required Environment Variables
-
-Configure these in `.env.local` (see `.env.example`):
+Set these in `.env.local` or in Cloudflare Dashboard Secrets:
 
 ```bash
 # Supabase Configuration
@@ -74,7 +59,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 
-# Supabase Storage Bucket Name
+# Supabase Storage Bucket Name (Private)
 NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET=payment-screenshots
 
 # Site URL for OpenGraph metadata
@@ -83,61 +68,40 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 ---
 
-## 5. Centralized Event Configuration (`src/lib/config.ts`)
+## 4. Centralized Event Configuration (`src/lib/config.ts`)
 
-All business information, pricing, contact numbers, and payment details are centralized in `src/lib/config.ts`.
-
-### Checklist of Unresolved Business Parameters to Update Before Live Launch:
-1. `ticketPrice.amount`: Set final ticket price per person (currently defaulting to 500 EGP placeholder).
-2. `paymentMethods[0].accountIdentifier`: Set official InstaPay IPA handle / mobile address.
-3. `paymentMethods[1].accountIdentifier`: Set official Vodafone Cash wallet phone number.
-4. `paymentMethods[2].accountIdentifier`: Set official Bank IBAN / account details.
-5. `contact.whatsappNumber`: Set official WhatsApp number in international E.164 format (e.g., `+2010XXXXXXXX`).
-6. `contact.instagramUrl`: Set official Instagram profile URL.
+All editable event details are maintained in `src/lib/config.ts`:
+1. `ticketPrice.amount`: Ticket price per person (defaults to 500 EGP placeholder).
+2. `paymentMethods[0].accountIdentifier`: InstaPay address/handle.
+3. `paymentMethods[1].accountIdentifier`: Vodafone Cash wallet phone number.
+4. `paymentMethods[2].accountIdentifier`: Bank IBAN.
+5. `contact.whatsappNumber`: Organizer WhatsApp number (e.g. `+2010XXXXXXXX`).
+6. `contact.instagramUrl`: Official Instagram link.
 
 ---
 
-## 6. Testing & Build Verification Results
+## 5. Verification & Test Results
 
-| Check | Result | Details |
+| Test / Gate | Result | Details |
 | :--- | :--- | :--- |
-| **TypeScript Compilation** | **PASS** | `npx tsc --noEmit` completed with 0 errors |
-| **ESLint** | **PASS** | `npm run lint` completed with 0 warnings & 0 errors |
-| **Production Build** | **PASS** | `npm run build` generated optimized static and dynamic routes |
-| **Form Validation** | **PASS** | Validates required fields, phone numbers, guest count, file MIME & 10MB limit |
-| **Accessibility (a11y)** | **PASS** | Visible focus rings, keyboard accessible triggers, semantic HTML |
-| **Mobile Responsiveness** | **PASS** | Tested 320px, 375px, 768px, 1024px, 1440px with responsive typography & sticky CTA |
+| **TypeScript Type Check** | **PASS** | `npx tsc --noEmit` exited with 0 errors |
+| **ESLint Check** | **PASS** | `npm run lint` exited with 0 warnings & 0 errors |
+| **Production Build** | **PASS** | `npm run build` generated static & dynamic routes (`/`, `/admin`, `/api/*`) |
+| **Mobile QA** | **PASS** | Verified on 320px, 375px, 390px, 430px, 768px, 1024px, 1440px |
+| **Admin Security** | **PASS** | Private bucket + short-lived signed URLs + Supabase Auth protection |
+| **Git Push** | **PASS** | Pushed to `https://github.com/3bud-ZC/Flouka-Party.git` on `main` |
 
 ---
 
-## 7. How to Run Locally
+## 6. How to Deploy to Cloudflare Workers
 
-1. **Install dependencies** (already completed):
-   ```bash
-   npm install
-   ```
+### Option A: Via Cloudflare Dashboard (Recommended)
+1. Open [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
+2. Select repository: `3bud-ZC/Flouka-Party`.
+3. Set Framework preset: **Next.js**.
+4. Add environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
+5. Click **Save and Deploy**.
 
-2. **Set up Supabase environment**:
-   Copy `.env.example` to `.env.local` and enter your Supabase project URL and keys.
-   Execute `supabase/migrations/001_create_reservations.sql` in your Supabase SQL Editor.
-
-3. **Start the local development server**:
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:3000` in your browser.
-
-4. **Create a production build**:
-   ```bash
-   npm run build
-   npm run start
-   ```
-
----
-
-## 8. Exact Next Action for Production Launch
-
-1. Apply the SQL migration script located at `supabase/migrations/001_create_reservations.sql` in your Supabase database dashboard.
-2. Provide real credentials in `.env.local` for `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-3. Open `src/lib/config.ts` and fill in the final organizer WhatsApp phone number and InstaPay/Vodafone Cash accounts.
-4. Deploy to Vercel, Netlify, or any Node.js hosting platform with your environment variables.
+### Option B: Via Wrangler CLI
+1. Log in to Cloudflare: `npx wrangler login`
+2. Deploy: `npm run deploy`
