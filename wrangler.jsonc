@@ -8,12 +8,19 @@
   ],
   "workers_dev": true,
   "preview_urls": true,
+  "routes": [
+    {
+      "pattern": "flukah-party.abud.fun",
+      "custom_domain": true
+    }
+  ],
   "vars": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://ylhhvkbdfytmitkcfoac.supabase.co",
     "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_Cov8ThTWqDPrForvMAc2oQ_mjD281xw",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_Cov8ThTWqDPrForvMAc2oQ_mjD281xw",
     "NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET": "payment-screenshots",
-    "ADMIN_EMAIL": "abud@admin.fun"
+    "ADMIN_EMAIL": "abud@admin.fun",
+    "NEXT_PUBLIC_SITE_URL": "https://flukah-party.abud.fun"
   },
   "assets": {
     "directory": ".open-next/assets",
