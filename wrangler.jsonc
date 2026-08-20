@@ -6,6 +6,8 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "workers_dev": true,
+  "preview_urls": true,
   "vars": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://ylhhvkbdfytmitkcfoac.supabase.co",
     "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_Cov8ThTWqDPrForvMAc2oQ_mjD281xw",
