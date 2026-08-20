@@ -1,0 +1,162 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Shrikhand&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-parchment: #EFE6D5;
+  --bg-parchment-light: #FAF6ED;
+  --bg-parchment-dark: #E2D5BE;
+  --color-ink: #171B1E;
+  --color-ink-soft: #283038;
+  --color-terracotta: #D95338;
+  --color-terracotta-dark: #B83E26;
+  --color-egyptian-green: #45533F;
+  --color-egyptian-gold: #D4A359;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-parchment);
+    color: var(--color-ink);
+  }
+
+  body {
+    background-color: var(--bg-parchment);
+    color: var(--color-ink);
+    overflow-x: hidden;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    background-color: #D95338;
+    color: #FAF6ED;
+  }
+}
+
+/* Screenprint and Halftone effects */
+.bg-halftone {
+  background-image: radial-gradient(#171B1E 1px, transparent 1px);
+  background-size: 16px 16px;
+  opacity: 0.08;
+}
+
+.bg-halftone-terracotta {
+  background-image: radial-gradient(#D95338 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+  opacity: 0.12;
+}
+
+.bg-paper-grain {
+  background-color: #EFE6D5;
+  background-image: radial-gradient(rgba(23, 27, 30, 0.04) 1px, transparent 0);
+  background-size: 8px 8px;
+}
+
+/* Distressed ink text effect */
+.text-distressed {
+  text-shadow: 1px 1px 0px rgba(217, 83, 56, 0.4), -1px -1px 0px rgba(69, 83, 63, 0.3);
+}
+
+.text-ink-shadow {
+  text-shadow: 2px 2px 0px #171B1E;
+}
+
+.text-terracotta-shadow {
+  text-shadow: 3px 3px 0px #D95338;
+}
+
+.text-green-shadow {
+  text-shadow: 2px 2px 0px #45533F;
+}
+
+/* Vintage Paper borders and stamps */
+.vintage-border {
+  border: 2px solid #171B1E;
+  box-shadow: 4px 4px 0px #171B1E;
+}
+
+.vintage-border-terracotta {
+  border: 2px solid #D95338;
+  box-shadow: 4px 4px 0px #D95338;
+}
+
+.vintage-border-green {
+  border: 2px solid #45533F;
+  box-shadow: 4px 4px 0px #45533F;
+}
+
+.stamp-border {
+  border: 2px dashed #171B1E;
+}
+
+.ticket-edge-left {
+  position: relative;
+}
+.ticket-edge-left::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-color: var(--bg-parchment);
+  border-radius: 50%;
+  border-right: 2px solid #171B1E;
+}
+
+/* Nile Wave animation */
+@keyframes waveFlow {
+  0% { transform: translateX(0) translateZ(0) scaleY(1); }
+  50% { transform: translateX(-25%) translateZ(0) scaleY(1.05); }
+  100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+}
+
+.animate-nile-wave {
+  animation: waveFlow 20s linear infinite;
+}
+
+/* Custom Scrollbar in Vintage aesthetic */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #E5D8BF;
+}
+::-webkit-scrollbar-thumb {
+  background: #171B1E;
+  border-radius: 2px;
+  border: 2px solid #E5D8BF;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D95338;
+}
+
+/* Hand-drawn underline */
+.hand-underline {
+  position: relative;
+}
+.hand-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 4px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q25,0 50,5 T100,5' fill='none' stroke='%23D95338' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;
+  background-size: 60px 4px;
+}
+
+.hand-underline-green::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 4px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q25,0 50,5 T100,5' fill='none' stroke='%2345533F' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;
+  background-size: 60px 4px;
+}
