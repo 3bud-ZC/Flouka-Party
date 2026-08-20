@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdminClient, isSupabaseConfigured } from "@/lib/supabase";
 import { ReservationApiResponse } from "@/lib/types";
+import { eventConfig } from "@/lib/config";
 
 function generateBookingReference(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -38,8 +39,10 @@ export async function POST(req: NextRequest): Promise<NextResponse<ReservationAp
       errors.guestCount = "Guest count must be between 1 and 10.";
     }
 
-    if (!paymentMethod) {
-      errors.paymentMethod = "Please select a payment method.";
+    // Strict validation: paymentMethod must match one of the configured production payment methods
+    const allowedPaymentMethods = eventConfig.paymentMethods.map((m) => m.id as string);
+    if (!paymentMethod || !allowedPaymentMethods.includes(paymentMethod)) {
+      errors.paymentMethod = "Please select a valid payment method (InstaPay or Vodafone Cash).";
     }
 
     if (!screenshotFile || screenshotFile.size === 0) {

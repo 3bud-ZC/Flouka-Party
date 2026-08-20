@@ -348,22 +348,18 @@ export default function ReservationForm() {
             </div>
           </div>
 
-          {/* 6. Payment Method Selector */}
+          {/* 6. Payment Method Selector (Exactly 2 Production Methods: InstaPay & Vodafone Cash) */}
           <div>
             <label className="block font-mono text-xs uppercase tracking-wider font-bold text-ink mb-1.5">
               Payment Method Used <span className="text-terracotta">*</span>
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
-              {[
-                { id: "instapay", label: "InstaPay" },
-                { id: "vodafone_cash", label: "Vodafone Cash" },
-                { id: "bank_transfer", label: "Bank Transfer" },
-              ].map((m) => {
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+              {eventConfig.paymentMethods.map((m) => {
                 const isSelected = formData.paymentMethod === m.id;
                 return (
                   <label
                     key={m.id}
-                    className={`min-h-[44px] border-2 p-3 rounded-xs cursor-pointer flex items-center gap-2.5 transition-all ${
+                    className={`min-h-[48px] border-2 p-3.5 rounded-xs cursor-pointer flex items-center gap-3 transition-all ${
                       isSelected
                         ? "border-terracotta bg-terracotta/10 shadow-stamp"
                         : "border-ink bg-parchment hover:bg-parchment-light"
@@ -380,11 +376,16 @@ export default function ReservationForm() {
                           paymentMethod: m.id as PaymentMethodType,
                         }))
                       }
-                      className="accent-terracotta w-4 h-4"
+                      className="accent-terracotta w-4 h-4 cursor-pointer"
                     />
-                    <span className="font-heading text-sm font-bold text-ink uppercase">
-                      {m.label}
-                    </span>
+                    <div>
+                      <span className="font-heading text-sm font-bold text-ink uppercase block">
+                        {m.name}
+                      </span>
+                      <span className="font-mono text-[11px] text-ink/70 block">
+                        {m.accountIdentifier}
+                      </span>
+                    </div>
                   </label>
                 );
               })}
@@ -451,7 +452,7 @@ export default function ReservationForm() {
                 className="mt-1 w-5 h-5 accent-terracotta rounded-none cursor-pointer flex-shrink-0"
               />
               <span className="font-mono text-xs text-ink leading-relaxed">
-                I confirm that I have transferred <strong>{totalPrice} EGP</strong> for <strong>{formData.guestCount} {formData.guestCount === 1 ? "guest" : "guests"}</strong> and that all submitted details are accurate.
+                I confirm that I have transferred <strong>{totalPrice} EGP</strong> for <strong>{formData.guestCount} {formData.guestCount === 1 ? "guest" : "guests"}</strong> via <strong>{formData.paymentMethod === "instapay" ? "InstaPay" : "Vodafone Cash"}</strong> and that all submitted details are accurate.
               </span>
             </label>
             {errors.confirmedAccuracy && (

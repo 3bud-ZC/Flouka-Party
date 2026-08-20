@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useRef, useCallback } from "react";
 import Image from "next/image";
@@ -140,7 +140,7 @@ export default function ScreenshotUploader({
               Supports JPG, PNG, WEBP (Max 10MB)
             </p>
             <p className="font-mono text-[11px] text-egyptian-green font-semibold bg-egyptian-green/10 px-2 py-0.5 rounded border border-egyptian-green/30 mt-1">
-              ✓ InstaPay, Vodafone Cash, or Bank receipt
+              ✓ InstaPay or Vodafone Cash receipt
             </p>
           </div>
         </div>

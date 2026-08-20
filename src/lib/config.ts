@@ -1,10 +1,9 @@
-﻿import { EventConfig } from "./types";
+import { EventConfig } from "./types";
 
 /**
  * Centralized Event Configuration for Flukah Party
  * 
- * IMPORTANT: All event parameters, pricing, contact numbers, and payment details
- * are managed in this single file. Any unconfigured fields are flagged in `unresolvedFields`.
+ * Single source of truth for event parameters, pricing, contact numbers, and payment details.
  */
 export const eventConfig: EventConfig = {
   eventName: "Flukah Party",
@@ -24,37 +23,31 @@ export const eventConfig: EventConfig = {
   drinksPolicy: "Grab Your Drink (BYOB - Bring Your Own Beverage)",
   
   ticketPrice: {
-    amount: 500, // Configurable ticket price amount
+    amount: 550, // 550 EGP per guest
     currency: "EGP",
-    formatted: "500 EGP",
+    formatted: "550 EGP",
     note: "Per guest • Includes Nile cruise, sound setup, ice & mixers",
-    isConfigured: false, // Set to true when final pricing is locked
+    isConfigured: true,
   },
 
   paymentMethods: [
     {
       id: "instapay",
-      name: "InstaPay",
-      instructions: "Transfer to InstaPay IPA address or mobile number",
-      accountIdentifier: "flukahparty@instapay", // Placeholder - Update with actual InstaPay handle
-      accountName: "Flukah Event Organizers",
-      isConfigured: false,
+      name: "INSTAPAY",
+      instructions: "Transfer to official InstaPay address",
+      accountIdentifier: "abyio99@instapay",
+      accountName: "abyio99@instapay",
+      copyValue: "abyio99@instapay",
+      isConfigured: true,
     },
     {
       id: "vodafone_cash",
-      name: "Vodafone Cash",
-      instructions: "Transfer to the official Vodafone Cash wallet",
-      accountIdentifier: "+20 10X XXX XXXX", // Placeholder - Update with actual wallet number
-      accountName: "Flukah Wallet",
-      isConfigured: false,
-    },
-    {
-      id: "bank_transfer",
-      name: "Bank Transfer",
-      instructions: "Direct bank transfer (CIB / QNB / NBE)",
-      accountIdentifier: "EG00 0000 0000 0000 0000 0000 00", // Placeholder - Update with IBAN
-      accountName: "Flukah Events",
-      isConfigured: false,
+      name: "VODAFONE CASH",
+      instructions: "Transfer to official Vodafone Cash wallet",
+      accountIdentifier: "011 05317095",
+      accountName: "Vodafone Cash Wallet",
+      copyValue: "01105317095",
+      isConfigured: true,
     },
   ],
 
@@ -69,9 +62,6 @@ export const eventConfig: EventConfig = {
 
   // Developer Checklist: Unresolved business parameters that must be set before live launch
   unresolvedFields: [
-    "ticketPrice.amount",
-    "paymentMethods[0].accountIdentifier (InstaPay)",
-    "paymentMethods[1].accountIdentifier (Vodafone Cash)",
     "contact.whatsappNumber",
     "contact.instagramUrl",
   ],

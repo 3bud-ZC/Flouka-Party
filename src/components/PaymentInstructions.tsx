@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Check, Smartphone, Building2, HelpCircle } from "lucide-react";
+import { Copy, Check, Smartphone, Sparkles } from "lucide-react";
 import { eventConfig } from "@/lib/config";
 import PosterLabel from "./PosterLabel";
 import { NileWaveLines, VintageStar } from "./EgyptianDecorations";
@@ -17,7 +17,7 @@ export default function PaymentInstructions() {
   };
 
   const steps = [
-    { num: "01", title: "Transfer", desc: "Send total amount for your party via InstaPay or Cash wallet." },
+    { num: "01", title: "Transfer", desc: "Send total amount for your party via InstaPay or Vodafone Cash." },
     { num: "02", title: "Screenshot", desc: "Save screenshot of successful payment confirmation." },
     { num: "03", title: "Register", desc: "Fill in guest details below and upload your transfer screenshot." },
     { num: "04", title: "Confirm", desc: "Receive your booking code (FLK-XXXX) & dock info via WhatsApp." },
@@ -72,15 +72,15 @@ export default function PaymentInstructions() {
           ))}
         </div>
 
-        {/* Vertical Mobile-First Selectable Printed Payment Cards */}
+        {/* 2-Column Intentional Editorial Layout on Desktop / Stacked on Mobile */}
         <div className="bg-parchment-light border-3 border-ink p-5 sm:p-7 shadow-vintage-lg rounded-xs">
-          <div className="flex items-center justify-between pb-3 border-b-2 border-ink/20 mb-4">
+          <div className="flex items-center justify-between pb-3 border-b-2 border-ink/20 mb-4 sm:mb-6">
             <div>
               <h3 className="font-heading text-lg sm:text-xl text-ink font-bold uppercase">
-                Choose Payment Channel
+                Official Payment Channels
               </h3>
               <p className="font-mono text-xs text-ink/70">
-                Tap to select your preferred method & copy account details
+                Choose your method and copy account details with one tap
               </p>
             </div>
             <PosterLabel variant="green" size="sm">
@@ -88,184 +88,136 @@ export default function PaymentInstructions() {
             </PosterLabel>
           </div>
 
-          <div className="space-y-3 sm:space-y-4">
-            {/* InstaPay */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            {/* 1. InstaPay Ticket */}
             <div
               onClick={() => setSelectedMethod(0)}
-              className={`border-2 p-4 sm:p-5 rounded-xs transition-all cursor-pointer ${
+              className={`border-2 p-4 sm:p-5 rounded-xs transition-all cursor-pointer flex flex-col justify-between ${
                 selectedMethod === 0
                   ? "border-terracotta bg-terracotta/10 shadow-vintage-terracotta"
                   : "border-ink bg-parchment hover:bg-parchment-300/40"
               }`}
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-parchment border-2 border-ink rounded shadow-stamp flex-shrink-0">
-                    <Smartphone className="w-6 h-6 text-terracotta" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-heading text-base sm:text-lg font-bold text-ink uppercase">
-                        InstaPay
-                      </h4>
-                      {selectedMethod === 0 && (
-                        <span className="px-2 py-0.5 bg-terracotta text-white font-mono text-[10px] font-bold rounded">
-                          SELECTED
-                        </span>
-                      )}
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 bg-parchment border-2 border-ink rounded shadow-stamp flex-shrink-0">
+                      <Smartphone className="w-5 h-5 text-terracotta" />
                     </div>
-                    <p className="font-mono text-xs text-ink/70 mt-0.5">
-                      Account: <strong>{eventConfig.paymentMethods[0].accountName}</strong>
-                    </p>
+                    <div>
+                      <h4 className="font-heading text-base sm:text-lg font-bold text-ink uppercase">
+                        {eventConfig.paymentMethods[0].name}
+                      </h4>
+                      <p className="font-mono text-xs text-ink/70">
+                        {eventConfig.paymentMethods[0].instructions}
+                      </p>
+                    </div>
                   </div>
+
+                  {selectedMethod === 0 && (
+                    <span className="px-2 py-0.5 bg-terracotta text-white font-mono text-[10px] font-bold rounded flex-shrink-0">
+                      SELECTED
+                    </span>
+                  )}
                 </div>
 
-                <div className="w-full sm:w-auto flex items-center gap-2">
-                  <div className="flex-1 sm:flex-initial p-2.5 bg-parchment-light border border-ink font-mono text-xs sm:text-sm font-bold text-ink select-all break-all">
-                    {eventConfig.paymentMethods[0].accountIdentifier}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCopy(eventConfig.paymentMethods[0].accountIdentifier, 0);
-                    }}
-                    className="min-h-[44px] px-3.5 py-2 bg-ink text-parchment hover:bg-terracotta font-mono text-xs font-bold uppercase transition-colors shadow-stamp flex items-center gap-1 flex-shrink-0"
-                  >
-                    {copiedIndex === 0 ? (
-                      <>
-                        <Check className="w-4 h-4 text-emerald-400" />
-                        <span>Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4" />
-                        <span>Copy</span>
-                      </>
-                    )}
-                  </button>
+                <div className="bg-parchment-light border-2 border-ink p-3 rounded-xs my-2 font-mono text-sm sm:text-base font-bold text-ink select-all break-all text-center">
+                  {eventConfig.paymentMethods[0].accountIdentifier}
                 </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-ink/20 flex items-center justify-between gap-2">
+                <span className="font-mono text-[11px] text-ink/60">
+                  Tap to copy address
+                </span>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const valToCopy = eventConfig.paymentMethods[0].copyValue || eventConfig.paymentMethods[0].accountIdentifier;
+                    handleCopy(valToCopy, 0);
+                  }}
+                  className="min-h-[44px] px-5 py-2 bg-ink text-parchment hover:bg-terracotta font-mono text-xs font-bold uppercase transition-colors shadow-stamp flex items-center gap-1.5 flex-shrink-0"
+                >
+                  {copiedIndex === 0 ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-400" />
+                      <span>Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      <span>Copy Address</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 
-            {/* Vodafone Cash */}
+            {/* 2. Vodafone Cash Ticket */}
             <div
               onClick={() => setSelectedMethod(1)}
-              className={`border-2 p-4 sm:p-5 rounded-xs transition-all cursor-pointer ${
+              className={`border-2 p-4 sm:p-5 rounded-xs transition-all cursor-pointer flex flex-col justify-between ${
                 selectedMethod === 1
                   ? "border-terracotta bg-terracotta/10 shadow-vintage-terracotta"
                   : "border-ink bg-parchment hover:bg-parchment-300/40"
               }`}
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-parchment border-2 border-ink rounded shadow-stamp flex-shrink-0">
-                    <Smartphone className="w-6 h-6 text-egyptian-green" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-heading text-base sm:text-lg font-bold text-ink uppercase">
-                        Vodafone Cash Wallet
-                      </h4>
-                      {selectedMethod === 1 && (
-                        <span className="px-2 py-0.5 bg-terracotta text-white font-mono text-[10px] font-bold rounded">
-                          SELECTED
-                        </span>
-                      )}
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 bg-parchment border-2 border-ink rounded shadow-stamp flex-shrink-0">
+                      <Smartphone className="w-5 h-5 text-egyptian-green" />
                     </div>
-                    <p className="font-mono text-xs text-ink/70 mt-0.5">
-                      Wallet: <strong>{eventConfig.paymentMethods[1].accountName}</strong>
-                    </p>
+                    <div>
+                      <h4 className="font-heading text-base sm:text-lg font-bold text-ink uppercase">
+                        {eventConfig.paymentMethods[1].name}
+                      </h4>
+                      <p className="font-mono text-xs text-ink/70">
+                        {eventConfig.paymentMethods[1].instructions}
+                      </p>
+                    </div>
                   </div>
+
+                  {selectedMethod === 1 && (
+                    <span className="px-2 py-0.5 bg-terracotta text-white font-mono text-[10px] font-bold rounded flex-shrink-0">
+                      SELECTED
+                    </span>
+                  )}
                 </div>
 
-                <div className="w-full sm:w-auto flex items-center gap-2">
-                  <div className="flex-1 sm:flex-initial p-2.5 bg-parchment-light border border-ink font-mono text-xs sm:text-sm font-bold text-ink select-all break-all">
-                    {eventConfig.paymentMethods[1].accountIdentifier}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCopy(eventConfig.paymentMethods[1].accountIdentifier, 1);
-                    }}
-                    className="min-h-[44px] px-3.5 py-2 bg-ink text-parchment hover:bg-terracotta font-mono text-xs font-bold uppercase transition-colors shadow-stamp flex items-center gap-1 flex-shrink-0"
-                  >
-                    {copiedIndex === 1 ? (
-                      <>
-                        <Check className="w-4 h-4 text-emerald-400" />
-                        <span>Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4" />
-                        <span>Copy</span>
-                      </>
-                    )}
-                  </button>
+                <div className="bg-parchment-light border-2 border-ink p-3 rounded-xs my-2 font-mono text-sm sm:text-base font-bold text-ink select-all break-all text-center tracking-wider">
+                  {eventConfig.paymentMethods[1].accountIdentifier}
                 </div>
               </div>
-            </div>
 
-            {/* Bank Transfer */}
-            <div
-              onClick={() => setSelectedMethod(2)}
-              className={`border-2 p-4 sm:p-5 rounded-xs transition-all cursor-pointer ${
-                selectedMethod === 2
-                  ? "border-terracotta bg-terracotta/10 shadow-vintage-terracotta"
-                  : "border-ink bg-parchment hover:bg-parchment-300/40"
-              }`}
-            >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-parchment border-2 border-ink rounded shadow-stamp flex-shrink-0">
-                    <Building2 className="w-6 h-6 text-ink" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-heading text-base sm:text-lg font-bold text-ink uppercase">
-                        Bank Transfer (IBAN)
-                      </h4>
-                      {selectedMethod === 2 && (
-                        <span className="px-2 py-0.5 bg-terracotta text-white font-mono text-[10px] font-bold rounded">
-                          SELECTED
-                        </span>
-                      )}
-                    </div>
-                    <p className="font-mono text-xs text-ink/70 mt-0.5">
-                      Beneficiary: <strong>{eventConfig.paymentMethods[2].accountName}</strong>
-                    </p>
-                  </div>
-                </div>
+              <div className="mt-4 pt-3 border-t border-ink/20 flex items-center justify-between gap-2">
+                <span className="font-mono text-[11px] text-ink/60">
+                  Tap to copy number
+                </span>
 
-                <div className="w-full sm:w-auto flex items-center gap-2">
-                  <div className="flex-1 sm:flex-initial p-2.5 bg-parchment-light border border-ink font-mono text-xs sm:text-sm font-bold text-ink select-all break-all">
-                    {eventConfig.paymentMethods[2].accountIdentifier}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCopy(eventConfig.paymentMethods[2].accountIdentifier, 2);
-                    }}
-                    className="min-h-[44px] px-3.5 py-2 bg-ink text-parchment hover:bg-terracotta font-mono text-xs font-bold uppercase transition-colors shadow-stamp flex items-center gap-1 flex-shrink-0"
-                  >
-                    {copiedIndex === 2 ? (
-                      <>
-                        <Check className="w-4 h-4 text-emerald-400" />
-                        <span>Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4" />
-                        <span>Copy</span>
-                      </>
-                    )}
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const valToCopy = eventConfig.paymentMethods[1].copyValue || eventConfig.paymentMethods[1].accountIdentifier;
+                    handleCopy(valToCopy, 1);
+                  }}
+                  className="min-h-[44px] px-5 py-2 bg-ink text-parchment hover:bg-terracotta font-mono text-xs font-bold uppercase transition-colors shadow-stamp flex items-center gap-1.5 flex-shrink-0"
+                >
+                  {copiedIndex === 1 ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-400" />
+                      <span>Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      <span>Copy Number</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           </div>

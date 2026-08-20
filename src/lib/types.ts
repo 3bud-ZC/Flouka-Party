@@ -1,11 +1,12 @@
-﻿export type PaymentMethodType = "instapay" | "vodafone_cash" | "bank_transfer" | "other";
+export type PaymentMethodType = "instapay" | "vodafone_cash";
 
 export interface PaymentMethodConfig {
   id: PaymentMethodType;
   name: string;
   instructions: string;
-  accountIdentifier: string; // E.g. InstaPay address or phone number
+  accountIdentifier: string; // E.g. InstaPay address or formatted phone number
   accountName: string;
+  copyValue?: string; // Exact normalized string to copy to clipboard
   isConfigured: boolean; // Flag to indicate if real credentials are set
 }
 

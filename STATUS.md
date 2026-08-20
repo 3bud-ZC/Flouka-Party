@@ -1,57 +1,74 @@
-# Flukah Party — Project Status & Production Handoff
+# Flukah Party — Final Production Status & Deployment Handoff
 
 **Project Name:** Flukah Party Event Website & Organizer Deck  
 **Authoritative Repository:** [https://github.com/3bud-ZC/Flouka-Party.git](https://github.com/3bud-ZC/Flouka-Party.git)  
 **Target Branch:** `main`  
-**Latest Pushed Commit SHA:** `39bfec09ddbf05c169e2274b4aaca78f1b630a49`  
-**Status:** Mobile-First Redesign Complete • Security Hardened • Admin Deck Live • Pushed to GitHub • Cloudflare Workers Ready  
+**Ticket Price:** `550 EGP / guest`  
+**Status:** Production Ready • Real Payment Credentials Configured • Bank Transfer Removed • Security Hardened • Cloudflare Workers Ready  
 **Last Updated:** August 20, 2026  
 
 ---
 
-## 1. Executive Summary of Changes
+## 1. Production Payment Configuration (Single Source of Truth: `src/lib/config.ts`)
 
-### A. Mobile-First Redesign (375px / 390px Primary Canvas)
-* **Continuous Vertical Poster Flow**: Reduced empty cream margins and excess vertical padding (`py-8 sm:py-12`), creating high information density where the entire page scrolls seamlessly like one long illustrated Egyptian event poster.
-* **Elimination of Dashboard-Style Cards**: Redesigned **Event Details** to be typography-led and asymmetrical, highlighting `01 / 09`, `11 PM – 5 AM`, `DJ VIRUS`, `BYOB`, and `LIMITED GUESTS` without repetitive box grids.
-* **Mobile-First Selectable Payment Tickets**: Transformed horizontal desktop cards into vertical selectable printed cards (`InstaPay`, `Vodafone Cash`, `Bank Transfer`) with min-44px touch targets and instant copy triggers.
-* **Mobile Single-Column Registration Form**: Streamlined order with 16px+ inputs to prevent iOS browser auto-zoom, thumb-friendly guest count stepper (`-` / `+`), real-time price calculation, and large-touch drag-and-drop screenshot uploader.
-* **Thumb-Friendly Sticky Mobile CTA**: Responsive floating bottom bar on mobile screens with iPhone safe-area inset (`env(safe-area-inset-bottom)`) that automatically disappears when the registration form is visible.
+The project exposes **exactly two** official payment channels:
 
-### B. Secure Private Organizer Admin Deck (`/admin`)
-* **Authentication**: Protected with Supabase Auth (Organizer email & password). No public registration allowed.
-* **KPI Metrics**: Real-time summary of Total Bookings, Total Guests, Pending Verification, Confirmed Spots, Rejected, and Estimated Revenue.
-* **Reservation Management**: Instant search (by Name, Ref `FLK-XXXX`, Phone, WhatsApp, Notes), status filter tabs (`All`, `Pending`, `Confirmed`, `Rejected`), and quick status update actions (`Confirm`, `Reject`).
-* **Secure Payment Proof Viewer**: Payment screenshots are stored in a **PRIVATE** Supabase bucket. The admin deck generates temporary 60-second signed URLs on demand via `/api/admin/signed-url` to prevent public URL leakage.
-* **One-Click WhatsApp Communication**: Direct clickable WhatsApp chat deep-links prefilled with guest names and booking references.
-* **CSV Export**: Instant download of all reservation records as a structured `.csv` file.
+### 1. InstaPay
+* **Display Label:** `INSTAPAY`
+* **Account Identifier:** `abyio99@instapay`
+* **Copy Button Action:** Copies exactly `abyio99@instapay`
 
-### C. Security & Supabase Hardening
-* **Storage Privacy**: Storage bucket `payment-screenshots` is configured as **PRIVATE** (`public = false`) with strict 10MB limit and image MIME filters.
-* **Row Level Security (RLS)**: Public anonymous users are restricted to `INSERT` only (no reading or enumeration of other reservations). Authenticated organizers have full `SELECT`, `UPDATE`, `DELETE` access.
-* **Server-Side Protection**: `SUPABASE_SERVICE_ROLE_KEY` is kept server-side only and never exposed to the client.
+### 2. Vodafone Cash
+* **Display Label:** `VODAFONE CASH`
+* **Wallet Display:** `011 05317095`
+* **Copy Button Action:** Copies normalized `01105317095`
 
-### D. Cloudflare Workers / OpenNext Readiness
-* **Configuration**: `wrangler.jsonc` created with `nodejs_compat` and static asset bindings.
-* **OpenNext Adapter**: `open-next.config.ts` configured with `cloudflare-node` wrapper.
-* **Deployment Workflow**: Supports standard Next.js and Cloudflare scripts: `npm run dev`, `npm run build`, `npm run preview`, `npm run deploy`.
+### Bank Transfer Removal:
+* Bank Transfer and all legacy placeholder IBANs/banks have been **completely removed** from types, centralized configuration, payment cards, reservation form, backend validation, uploader hints, admin displays, and documentation.
 
 ---
 
-## 2. Technical Stack
+## 2. Dynamic Pricing Matrix (550 EGP / Guest)
 
-* **Framework**: Next.js 14 (App Router)
-* **Language**: TypeScript 5 (Strict Mode)
-* **Styling**: Tailwind CSS 3.4 with custom Egyptian color palette & screen-print grain utilities
-* **Icons**: Lucide React
-* **Deployment Target**: Cloudflare Workers / Pages & Node.js
-* **Backend**: Supabase PostgreSQL + Private Supabase Storage + Supabase Auth
+* **1 Guest:** `550 EGP`
+* **2 Guests:** `1,100 EGP`
+* **3 Guests:** `1,650 EGP`
+* **4 Guests:** `2,200 EGP`
+* **5 Guests:** `2,750 EGP`
+* **6 Guests:** `3,300 EGP`
+* **7 Guests:** `3,850 EGP`
+* **8 Guests:** `4,400 EGP`
+* **9 Guests:** `4,950 EGP`
+* **10 Guests:** `5,500 EGP`
 
 ---
 
-## 3. Required Environment Variables
+## 3. Mobile-First & Visual QA Verification
 
-Set these in `.env.local` or in Cloudflare Dashboard Secrets:
+* **Viewport Range:** Tested and verified across `320px`, `360px`, `375px`, `390px`, `393px`, `414px`, `430px`, `768px`, `1024px`, `1440px`.
+* **Payment Layout:**
+  - **Mobile:** Two full-width stacked printed ticket cards with clear selection highlights, min-44px tap targets, and visible copy confirmation.
+  - **Desktop:** Balanced, intentional 2-column editorial layout without awkward empty slots.
+* **Form & Typography:**
+  - Form inputs use `text-base` (>=16px) to eliminate iOS auto-zoom behavior.
+  - Sticky mobile CTA respects iPhone safe-area padding (`env(safe-area-inset-bottom)`) and auto-hides when the reservation form is in view.
+
+---
+
+## 4. Security & Supabase Architecture
+
+* **Storage:** Bucket `payment-screenshots` is **PRIVATE** (`public = false`) with 10MB limit and image MIME filters.
+* **Signed URLs:** Organizer deck generates temporary 60-second signed URLs on demand via protected `/api/admin/signed-url` endpoint.
+* **Row Level Security (RLS):**
+  - Public anonymous users: `INSERT` only (no reading or enumeration of other reservations).
+  - Authenticated organizers: Full `SELECT`, `UPDATE`, `DELETE` access.
+* **Service Role Key:** `SUPABASE_SERVICE_ROLE_KEY` is strictly server-side and never exposed to the client.
+
+---
+
+## 5. Required Production Environment Variables
+
+Set these in Cloudflare Dashboard Secrets or `.env.local`:
 
 ```bash
 # Supabase Configuration
@@ -68,40 +85,26 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 ---
 
-## 4. Centralized Event Configuration (`src/lib/config.ts`)
+## 6. Build & Test Verification Results
 
-All editable event details are maintained in `src/lib/config.ts`:
-1. `ticketPrice.amount`: Ticket price per person (defaults to 500 EGP placeholder).
-2. `paymentMethods[0].accountIdentifier`: InstaPay address/handle.
-3. `paymentMethods[1].accountIdentifier`: Vodafone Cash wallet phone number.
-4. `paymentMethods[2].accountIdentifier`: Bank IBAN.
-5. `contact.whatsappNumber`: Organizer WhatsApp number (e.g. `+2010XXXXXXXX`).
-6. `contact.instagramUrl`: Official Instagram link.
-
----
-
-## 5. Verification & Test Results
-
-| Test / Gate | Result | Details |
+| Gate / Command | Status | Result |
 | :--- | :--- | :--- |
-| **TypeScript Type Check** | **PASS** | `npx tsc --noEmit` exited with 0 errors |
-| **ESLint Check** | **PASS** | `npm run lint` exited with 0 warnings & 0 errors |
-| **Production Build** | **PASS** | `npm run build` generated static & dynamic routes (`/`, `/admin`, `/api/*`) |
-| **Mobile QA** | **PASS** | Verified on 320px, 375px, 390px, 430px, 768px, 1024px, 1440px |
-| **Admin Security** | **PASS** | Private bucket + short-lived signed URLs + Supabase Auth protection |
-| **Git Push** | **PASS** | Pushed to `https://github.com/3bud-ZC/Flouka-Party.git` on `main` |
+| `npx tsc --noEmit` | **PASS** | 0 TypeScript errors |
+| `npm run lint` | **PASS** | 0 ESLint warnings or errors |
+| `npm run build` | **PASS** | Next.js production build generated successfully |
+| `OpenNext / Wrangler` | **PASS** | `wrangler.jsonc` & `open-next.config.ts` configured |
 
 ---
 
-## 6. How to Deploy to Cloudflare Workers
+## 7. Cloudflare Deployment Instructions
 
-### Option A: Via Cloudflare Dashboard (Recommended)
-1. Open [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
-2. Select repository: `3bud-ZC/Flouka-Party`.
-3. Set Framework preset: **Next.js**.
-4. Add environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
-5. Click **Save and Deploy**.
+1. **Via Cloudflare Dashboard (Recommended)**:
+   - Navigate to **Cloudflare Dashboard → Workers & Pages → Create application → Pages → Connect to Git**.
+   - Select repository: `3bud-ZC/Flouka-Party`.
+   - Preset: **Next.js**.
+   - Add environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
+   - Click **Save and Deploy**.
 
-### Option B: Via Wrangler CLI
-1. Log in to Cloudflare: `npx wrangler login`
-2. Deploy: `npm run deploy`
+2. **Via Wrangler CLI**:
+   - Run `npx wrangler login`
+   - Run `npm run deploy`
