@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseAdminClient, verifyAdminToken, isSupabaseConfigured } from "@/lib/supabase";
+import {
+  getSupabaseAdminClient,
+  verifyAdminToken,
+  isSupabaseConfigured,
+  isSupabaseAdminConfigured,
+} from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
     if (!isSupabaseConfigured()) {
       return NextResponse.json(
-        { success: false, message: "Supabase database is not configured." },
+        { success: false, message: "Supabase public configuration is missing." },
         { status: 503 }
       );
     }
@@ -20,6 +25,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (!isSupabaseAdminConfigured()) {
+      return NextResponse.json(
+        { success: false, message: "Supabase server secret is not configured." },
+        { status: 503 }
+      );
+    }
+
     const body = await req.json();
     const { screenshotPath } = body;
 
@@ -30,10 +42,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const supabase = getSupabaseAdminClient()!;
+    const supabase = getSupabaseAdminClient();
+    if (!supabase) {
+      return NextResponse.json(
+        { success: false, message: "Supabase admin client could not be initialized." },
+        { status: 503 }
+      );
+    }
+
     const bucketName = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET || "payment-screenshots";
 
-    // Create a 60-second temporary signed URL
     const { data, error } = await supabase.storage
       .from(bucketName)
       .createSignedUrl(screenshotPath, 60);
