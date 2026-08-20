@@ -1,129 +1,58 @@
-# Flukah Party — Final Production Status & Deployment Handoff
+# Flukah Party — Production Status
 
-**Project Name:** Flukah Party Event Website & Organizer Deck  
-**Authoritative Repository:** https://github.com/3bud-ZC/Flouka-Party.git  
-**Target Branch:** `main`  
+**Repository:** https://github.com/3bud-ZC/Flouka-Party.git  
+**Branch:** `main`  
 **Ticket Price:** `550 EGP / guest`  
-**Status:** Production code ready • Supabase connected • Admin created and restricted • Cloudflare repository configuration hardened • Final live deploy pending server secret / deployment verification  
-**Last Updated:** August 20, 2026  
+**Current Live URL:** `https://flouka-party.3bdullhrgb.workers.dev`  
+**Target Custom Domain:** `https://flukah-party.abud.fun`  
+**Status:** Live on Cloudflare Workers • Supabase connected • Admin secured • Performance refinement in progress  
+**Last Updated:** August 21, 2026
 
----
+## Payments
 
-## 1. Production Payment Configuration
+- InstaPay: `abyio99@instapay`
+- Vodafone Cash: display `011 05317095`, copy `01105317095`
+- Bank transfer removed.
+- Allowed backend payment methods: `instapay`, `vodafone_cash` only.
 
-The project exposes exactly two payment channels:
+## Supabase
 
-- **InstaPay:** `abyio99@instapay`
-- **Vodafone Cash:** display `011 05317095`, copy value `01105317095`
-- Bank Transfer / IBAN support has been removed from UI, validation, types, admin display, and documentation.
-- Ticket price remains `550 EGP / guest`.
-
----
-
-## 2. Supabase Production State
-
-- Production project URL: `https://ylhhvkbdfytmitkcfoac.supabase.co`
+- Project connected and healthy.
 - `public.reservations` exists with RLS enabled.
-- `payment-screenshots` exists as a **PRIVATE** Storage bucket.
-- Payment screenshots are exposed to the organizer only through short-lived signed URLs.
+- `payment-screenshots` is PRIVATE.
 - Admin email: `abud@admin.fun`.
-- The Supabase Auth user for `abud@admin.fun` exists and is email-confirmed.
-- Reservation reads / updates / deletes are restricted to the designated admin email.
-- Private screenshot reads / deletes are restricted to the designated admin email.
-- Database payment-method constraint accepts only `instapay` and `vodafone_cash`.
-- Supabase Security Advisor was clean after the hardening migration.
+- Admin Auth user exists and is confirmed.
+- Reservation read/update/delete and screenshot read/delete are restricted to the designated admin.
+- Server APIs require `SUPABASE_SECRET_KEY` / legacy service-role fallback and never fall back to the public key.
 
----
+## Cloudflare
 
-## 3. Supabase Key Handling
+- OpenNext / Workers deployment is working.
+- Build command: `npm run build:worker`
+- Deploy command: `npm run deploy:worker`
+- Node: `20.18.0`
+- `workers.dev` and preview URLs enabled.
+- `wrangler.jsonc` already declares `flukah-party.abud.fun` as a Custom Domain route.
+- `.env.production` and Wrangler runtime vars already use `https://flukah-party.abud.fun` as `NEXT_PUBLIC_SITE_URL`.
+- The real privileged Supabase secret is configured only in Cloudflare, not GitHub.
 
-`src/lib/supabase.ts` supports:
+## Performance Pass
 
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as the preferred browser/public key.
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` as a legacy public-key fallback.
-- `SUPABASE_SECRET_KEY` as the preferred server-only privileged key.
-- `SUPABASE_SERVICE_ROLE_KEY` as a legacy server-only fallback.
+Completed:
 
-The server/admin client **never falls back to the public publishable key**.
+- Removed an unnecessary duplicate root-level `poster.png` from the repository/build context; the served asset remains `public/poster.png`.
+- Removed unnecessary client hydration from `GrainOverlay`.
+- Tuned Next.js responsive image device sizes for common mobile widths (`320`, `360`, `375`, `390`, `414`, `430`) and enabled a longer optimized-image cache TTL.
 
-A real Supabase server secret is mandatory for reservation screenshot upload and organizer APIs.
+Primary remaining performance item:
 
----
+- `public/poster.png` is still approximately 3.4 MB. It should be compressed/re-encoded to a production WebP/AVIF asset while preserving the poster appearance, because social traffic is expected to be predominantly mobile.
 
-## 4. Cloudflare / Build Configuration
+## Remaining Launch / Polish Work
 
-The repository is configured for Cloudflare Workers through OpenNext.
-
-### Build commands
-
-```bash
-npm run build:worker
-npm run deploy:worker
-```
-
-### Repository configuration
-
-- `package.json` pins the Cloudflare adapter command to `@opennextjs/cloudflare@0.6.6`, matching the current Next.js 14 project line.
-- `open-next.config.ts` contains the required Cloudflare overrides.
-- `wrangler.jsonc` points to `.open-next/worker.js` and `.open-next/assets`.
-- `wrangler.jsonc` now includes all **non-secret** Supabase/runtime values directly.
-- `.env.production` now includes the safe public Supabase values so Next.js has them during the Cloudflare build even when the Cloudflare UI reports no build variables.
-- `.nvmrc` pins Node.js `20.18.0` for a stable Next.js 14 / OpenNext build environment.
-
-No Supabase privileged secret is committed to the repository.
-
----
-
-## 5. Production Environment
-
-Safe public values are already committed through `.env.production` / `wrangler.jsonc`:
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=https://ylhhvkbdfytmitkcfoac.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<configured publishable key>
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<same public compatibility key>
-NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET=payment-screenshots
-ADMIN_EMAIL=abud@admin.fun
-```
-
-The deployment platform still needs exactly one privileged Supabase server secret configured securely:
-
-```bash
-SUPABASE_SECRET_KEY=<real Supabase secret key>
-```
-
-Do **not** use the `sb_publishable_...` value as `SUPABASE_SECRET_KEY` or `SUPABASE_SERVICE_ROLE_KEY`.
-
-After the first successful deployment, set:
-
-```bash
-NEXT_PUBLIC_SITE_URL=https://<final-workers-or-custom-domain>
-```
-
-and redeploy so OpenGraph metadata uses the final public URL.
-
----
-
-## 6. Last Verified Quality Gates
-
-| Gate | Status |
-| --- | --- |
-| TypeScript | PASS in previous production pass |
-| ESLint | PASS in previous production pass |
-| Next.js production build | PASS in previous production pass |
-| Supabase schema / RLS | PASS |
-| Supabase Security Advisor | PASS |
-| Mobile QA | PASS in previous production pass |
-| Cloudflare live deployment | PENDING re-run after latest repo fixes |
-
----
-
-## 7. Remaining Production Actions
-
-1. Configure the real `SUPABASE_SECRET_KEY` as a Cloudflare Worker secret if it is not already present.
-2. Trigger a fresh Cloudflare deployment from the latest `main` commit — do not retry an old failed commit.
-3. Record the final public Workers/custom-domain URL in `NEXT_PUBLIC_SITE_URL` and redeploy once.
-4. Run one end-to-end test reservation: submit -> private screenshot upload -> admin login -> signed screenshot view -> confirm/reject.
-5. Delete the test reservation and test screenshot after verification.
-
-No additional feature development is required for launch.
+1. Deploy the latest `main` commit so the performance changes are live.
+2. Verify `flukah-party.abud.fun` is created/active in Cloudflare and resolve any conflicting DNS record if Cloudflare reports one.
+3. Compress the poster asset and update the hero/OG image references.
+4. Run a real mobile performance check on 375px / 390px and refine LCP, image payload, hydration and below-the-fold rendering.
+5. Run one real end-to-end booking: submit -> screenshot upload -> `/admin` -> signed screenshot -> confirm/reject -> cleanup test data.
+6. Continue UI polish after mobile screenshots are reviewed.
