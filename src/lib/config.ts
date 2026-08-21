@@ -11,8 +11,8 @@ export const eventConfig: EventConfig = {
   date: "01 / 09",
   dateNumber: "1/9",
   fullDate: "Sunday, September 1st",
-  time: "11 PM – 5 AM",
-  duration: "6 Hours After Dark",
+  time: "11 PM – 3 AM",
+  duration: "4 Hours After Dark",
   locationText: "Private Dock on the Nile (Exact boarding location sent upon confirmation)",
   locationCity: "Cairo, Egypt",
   djName: "DJ Virus",
@@ -52,19 +52,15 @@ export const eventConfig: EventConfig = {
   ],
 
   contact: {
-    whatsappNumber: "+201000000000", // Update with organizers WhatsApp (E.164 format)
-    whatsappDisplay: "+20 100 000 0000",
-    phoneContact: "+20 100 000 0000",
-    instagramHandle: "@flukahparty",
-    instagramUrl: "https://instagram.com/flukahparty",
-    isConfigured: false,
+    whatsappNumber: "+201105317095",
+    whatsappDisplay: "011 05317095",
+    phoneContact: "01105317095",
+    instagramHandle: "@1sraa_1",
+    instagramUrl: "https://instagram.com/1sraa_1",
+    isConfigured: true,
   },
 
-  // Developer Checklist: Unresolved business parameters that must be set before live launch
-  unresolvedFields: [
-    "contact.whatsappNumber",
-    "contact.instagramUrl",
-  ],
+  unresolvedFields: [],
 };
 
 /**

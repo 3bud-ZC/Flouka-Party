@@ -1,10 +1,10 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
-import { Copy, Check, MessageCircle, Clock, Calendar, ArrowRight, ShieldCheck } from "lucide-react";
+import { Copy, Check, MessageCircle, Clock, ArrowRight } from "lucide-react";
 import { eventConfig, getWhatsAppLink } from "@/lib/config";
-import { EyeOfHorus, NileWaveLines, VintageStar } from "./EgyptianDecorations";
+import { NileWaveLines, VintageStar } from "./EgyptianDecorations";
 import PosterLabel from "./PosterLabel";
 
 interface ConfirmationViewProps {
@@ -25,7 +25,6 @@ export default function ConfirmationView({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // Fire celebratory confetti on mount
     try {
       confetti({
         particleCount: 80,
@@ -34,7 +33,7 @@ export default function ConfirmationView({
         colors: ["#D95338", "#45533F", "#171B1E", "#D4A359", "#FAF6ED"],
       });
     } catch {
-      // Graceful fallback if confetti fails in some environments
+      // Graceful fallback
     }
   }, []);
 
@@ -52,7 +51,7 @@ export default function ConfirmationView({
       <div className="absolute inset-0 bg-halftone pointer-events-none" />
 
       {/* Decorative top stamp banner */}
-      <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+      <div className="relative z-10 flex flex-col items-center text-center space-y-3.5">
         <div className="flex items-center space-x-3">
           <VintageStar className="w-5 h-5 text-terracotta animate-spin-slow" />
           <PosterLabel variant="green" size="sm" rotate="left">
@@ -66,13 +65,13 @@ export default function ConfirmationView({
         </h2>
 
         <p className="font-heading text-lg sm:text-xl text-terracotta font-semibold">
-          Flukah Party • 01 / 09 • 11 PM – 5 AM
+          Flukah Party • 01 / 09 • {eventConfig.time}
         </p>
 
-        <NileWaveLines className="w-32 h-4 text-terracotta my-2" />
+        <NileWaveLines className="w-32 h-4 text-terracotta my-1.5" />
 
         {/* Big Booking Reference Ticket */}
-        <div className="w-full bg-parchment border-2 border-dashed border-ink p-6 rounded-xs shadow-stamp my-4 relative">
+        <div className="w-full bg-parchment border-2 border-dashed border-ink p-5 sm:p-6 rounded-xs shadow-stamp my-3 relative">
           <div className="text-xs font-mono font-bold uppercase tracking-widest text-ink/70 mb-1">
             Your Booking Reference
           </div>
@@ -132,7 +131,7 @@ export default function ConfirmationView({
         </div>
 
         {/* Direct Action Buttons */}
-        <div className="w-full pt-4 space-y-3">
+        <div className="w-full pt-3 space-y-3">
           <a
             href={whatsappUrl}
             target="_blank"

@@ -15,7 +15,7 @@ import {
 
 export default function Hero() {
   return (
-    <section className="relative w-full flex flex-col justify-between overflow-hidden pt-3 sm:pt-6 pb-6 sm:pb-10 px-4 sm:px-6 lg:px-8 border-b-3 border-ink">
+    <section className="relative w-full flex flex-col justify-between overflow-hidden pt-3 sm:pt-6 pb-6 sm:pb-8 px-4 sm:px-6 lg:px-8 border-b-3 border-ink">
       {/* Background Halftone */}
       <div className="absolute inset-0 bg-halftone opacity-30 pointer-events-none" />
 
@@ -62,7 +62,7 @@ export default function Hero() {
       {/* Main Hero Asymmetrical Layout */}
       <div className="relative z-10 w-full max-w-6xl mx-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
         {/* Left Column: Expressive Typography */}
-        <div className="lg:col-span-7 flex flex-col justify-center space-y-4 sm:space-y-5">
+        <div className="lg:col-span-7 flex flex-col justify-center space-y-3.5 sm:space-y-4">
           {/* Eyebrow Stamp Bar */}
           <div className="flex flex-wrap items-center gap-2">
             <PosterLabel variant="green" size="sm" rotate="left">
@@ -95,16 +95,16 @@ export default function Hero() {
               </span>
             </h1>
 
-            <NileWaveLines className="w-36 sm:w-56 h-4 text-terracotta mt-3" />
+            <NileWaveLines className="w-36 sm:w-56 h-4 text-terracotta mt-2.5" />
           </div>
 
           {/* Editorial Hook */}
           <p className="font-heading text-base sm:text-xl text-ink font-bold leading-snug">
-            “Music. Nile air. A felucca. One long summer night.”
+            “Music. Nile air. A felucca. One summer night.”
           </p>
 
           <p className="font-body text-sm sm:text-base text-ink/80 leading-relaxed max-w-lg">
-            Mixed Arabic & English sets by DJ Virus drifting under Cairo stars from 11 PM to 5 AM. Grab your drink, board the boat, and sail the historic Nile.
+            Mixed Arabic & English sets by DJ Virus drifting under Cairo stars from 11 PM to 3 AM. Grab your drink, board the boat, and sail the Nile.
           </p>
 
           {/* Key Facts Pill Grid */}
@@ -120,8 +120,8 @@ export default function Hero() {
             <div className="border-2 border-ink bg-parchment-light p-2.5 shadow-stamp flex items-center gap-2">
               <Clock className="w-4 h-4 text-egyptian-green flex-shrink-0" />
               <div className="text-[11px] font-mono leading-tight">
-                <strong className="block text-ink uppercase">11 PM – 5 AM</strong>
-                <span className="text-ink/70">6 Hours</span>
+                <strong className="block text-ink uppercase">11 PM – 3 AM</strong>
+                <span className="text-ink/70">4 Hours</span>
               </div>
             </div>
 

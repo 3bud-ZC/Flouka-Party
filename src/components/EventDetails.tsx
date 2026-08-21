@@ -1,16 +1,16 @@
 import React from "react";
-import { Clock, Music2, User, Anchor, Users, Wine, MapPin } from "lucide-react";
+import { Clock, Music2, Anchor, Users, GlassWater } from "lucide-react";
 import { eventConfig } from "@/lib/config";
 import PosterLabel from "./PosterLabel";
-import { EyeOfHorus, NileWaveLines, VintageStar, HieroglyphicCartoucheStrip } from "./EgyptianDecorations";
+import { NileWaveLines, VintageStar } from "./EgyptianDecorations";
 
 export default function EventDetails() {
   return (
-    <section id="details" className="w-full py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative scroll-mt-12">
+    <section id="details" className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8 relative scroll-mt-12">
       <div className="max-w-5xl mx-auto">
         {/* Section Stamp Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 mb-2">
+        <div className="text-center mb-5 sm:mb-6">
+          <div className="inline-flex items-center gap-2 mb-1.5">
             <VintageStar className="w-4 h-4 text-terracotta" />
             <PosterLabel variant="green" size="sm" rotate="left">
               EVENT SPECIFICATIONS
@@ -18,19 +18,18 @@ export default function EventDetails() {
             <VintageStar className="w-4 h-4 text-terracotta" />
           </div>
 
-          <h2 className="font-display text-3xl sm:text-5xl text-ink uppercase tracking-tight text-ink-shadow">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-ink uppercase tracking-tight text-ink-shadow">
             The Blueprint
           </h2>
-          <NileWaveLines className="w-32 h-3.5 text-terracotta mx-auto mt-2" />
+          <NileWaveLines className="w-28 h-3 text-terracotta mx-auto mt-2" />
         </div>
 
         {/* Asymmetrical Poster-Style Layout */}
-        <div className="bg-parchment-light border-3 border-ink shadow-vintage-lg p-5 sm:p-8 rounded-xs relative overflow-hidden">
-          {/* Subtle Halftone Texture */}
+        <div className="bg-parchment-light border-3 border-ink shadow-vintage-lg p-5 sm:p-7 rounded-xs relative overflow-hidden">
           <div className="absolute inset-0 bg-halftone opacity-30 pointer-events-none" />
 
-          {/* Top Banner Row: Giant 01/09 + Key Specs in Expressive Layout */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pb-6 border-b-2 border-dashed border-ink/30">
+          {/* Top Banner Row: Giant 01/09 + Sound Highlight Box */}
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center pb-5 border-b-2 border-dashed border-ink/30">
             {/* Left: Giant 01 / 09 Monument */}
             <div className="lg:col-span-5 text-center lg:text-left flex flex-col items-center lg:items-start">
               <span className="font-mono text-xs font-bold uppercase tracking-widest text-ink/70">
@@ -50,7 +49,7 @@ export default function EventDetails() {
             </div>
 
             {/* Right: Sound & Night Highlight Box */}
-            <div className="lg:col-span-7 bg-parchment border-2 border-ink p-4 sm:p-5 rounded-xs shadow-stamp space-y-3">
+            <div className="lg:col-span-7 bg-parchment border-2 border-ink p-4 sm:p-5 rounded-xs shadow-stamp space-y-2.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <PosterLabel variant="terracotta" size="sm">
                   SOUND CURATION
@@ -71,7 +70,7 @@ export default function EventDetails() {
 
               <div className="pt-2 border-t border-ink/20 flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
                 <span className="text-terracotta font-bold">
-                  ✓ 6 Hours Sailing
+                  ✓ 4 Hours Sailing (11 PM – 3 AM)
                 </span>
                 <span className="text-egyptian-green font-bold">
                   ✓ BYOB (Ice & Cups Provided)
@@ -80,15 +79,15 @@ export default function EventDetails() {
             </div>
           </div>
 
-          {/* Bottom Information Strips (Typography & Poster Tags instead of generic cards) */}
-          <div className="relative z-10 pt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {/* Bottom Information Strips */}
+          <div className="relative z-10 pt-5 grid grid-cols-1 sm:grid-cols-3 gap-3.5">
             {/* Hours */}
             <div className="border-l-3 border-terracotta pl-3 py-1">
               <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-ink/60 block">
                 TIMING
               </span>
-              <span className="font-heading text-lg font-bold text-ink block">
-                11:00 PM – 5:00 AM
+              <span className="font-heading text-base sm:text-lg font-bold text-ink block">
+                11:00 PM – 3:00 AM
               </span>
               <span className="font-mono text-xs text-ink/70">
                 Boarding starts 10:30 PM
@@ -100,7 +99,7 @@ export default function EventDetails() {
               <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-ink/60 block">
                 CAPACITY
               </span>
-              <span className="font-heading text-lg font-bold text-ink block">
+              <span className="font-heading text-base sm:text-lg font-bold text-ink block">
                 Limited Guests Only
               </span>
               <span className="font-mono text-xs text-ink/70">
@@ -109,11 +108,11 @@ export default function EventDetails() {
             </div>
 
             {/* Drinks Policy */}
-            <div className="border-l-3 border-ink pl-3 py-1 sm:col-span-2 md:col-span-1">
+            <div className="border-l-3 border-ink pl-3 py-1">
               <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-ink/60 block">
                 BEVERAGES
               </span>
-              <span className="font-heading text-lg font-bold text-ink block">
+              <span className="font-heading text-base sm:text-lg font-bold text-ink block">
                 Grab Your Drink (BYOB)
               </span>
               <span className="font-mono text-xs text-ink/70">

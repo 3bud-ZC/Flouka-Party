@@ -5,11 +5,11 @@ import { NileWaveLines, VintageStar } from "./EgyptianDecorations";
 
 export default function FinalCTA() {
   return (
-    <section className="w-full py-10 sm:py-16 px-4 sm:px-6 lg:px-8 bg-parchment-light border-t-3 border-ink relative overflow-hidden">
+    <section className="w-full py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-parchment-light border-t-3 border-ink relative overflow-hidden">
       <div className="absolute inset-0 bg-halftone opacity-35 pointer-events-none" />
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <div className="flex items-center justify-center gap-2 mb-4">
+        <div className="flex items-center justify-center gap-2 mb-3">
           <VintageStar className="w-4 h-4 text-terracotta animate-spin-slow" />
           <PosterLabel variant="terracotta" size="md" rotate="left">
             SEPTEMBER 1ST • CAIRO
@@ -29,19 +29,19 @@ export default function FinalCTA() {
         </h2>
 
         {/* Big Date and Capacity */}
-        <div className="my-4 flex flex-wrap items-center justify-center gap-3">
+        <div className="my-3 flex flex-wrap items-center justify-center gap-3">
           <span className="font-display text-3xl sm:text-4xl text-ink tracking-tight bg-parchment px-3 py-1 border-2 border-ink shadow-stamp rounded-xs">
             01 / 09
           </span>
           <span className="font-heading text-lg sm:text-xl text-terracotta font-bold uppercase tracking-wider">
-            11 PM – 5 AM
+            11 PM – 3 AM
           </span>
           <PosterLabel variant="green" size="sm" rotate="right">
             LIMITED GUESTS
           </PosterLabel>
         </div>
 
-        <NileWaveLines className="w-36 sm:w-48 h-4 text-terracotta mx-auto my-4" />
+        <NileWaveLines className="w-36 sm:w-48 h-4 text-terracotta mx-auto my-3" />
 
         {/* Big Final CTA Button */}
         <div className="pt-1">

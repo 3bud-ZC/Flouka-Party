@@ -1,4 +1,4 @@
-﻿import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import GrainOverlay from "@/components/GrainOverlay";
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: "Flukah Party — 01/09 | DJ Virus",
   description:
-    "A night on the Nile. Mixed Arabic & English music by DJ Virus. 01/09, 11 PM–5 AM. Limited guests.",
+    "A night on the Nile. Mixed Arabic & English music by DJ Virus. 01/09, 11 PM–3 AM. Limited guests.",
   keywords: [
     "Flukah Party",
     "DJ Virus",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Flukah Party — 01/09 | DJ Virus",
     description:
-      "A night on the Nile. Mixed Arabic & English music by DJ Virus. 01/09, 11 PM–5 AM. Limited guests.",
+      "A night on the Nile. Mixed Arabic & English music by DJ Virus. 01/09, 11 PM–3 AM. Limited guests.",
     url: "/",
     siteName: "Flukah Party",
     images: [
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Flukah Party — 01/09 | DJ Virus",
     description:
-      "A night on the Nile. Mixed Arabic & English music by DJ Virus. 01/09, 11 PM–5 AM. Limited guests.",
+      "A night on the Nile. Mixed Arabic & English music by DJ Virus. 01/09, 11 PM–3 AM. Limited guests.",
     images: ["/poster.png"],
   },
   icons: {

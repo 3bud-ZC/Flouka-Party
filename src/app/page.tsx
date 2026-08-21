@@ -1,8 +1,7 @@
-﻿import React from "react";
+import React from "react";
 import Hero from "@/components/Hero";
 import TheNight from "@/components/TheNight";
 import EventDetails from "@/components/EventDetails";
-import AtmosphereVisual from "@/components/AtmosphereVisual";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import ReservationForm from "@/components/ReservationForm";
 import ContactActions from "@/components/ContactActions";
@@ -18,42 +17,33 @@ export default function Home() {
       <Hero />
 
       {/* Divider */}
-      <VintageDivider label="Music • Nile • Felucca" />
+      <VintageDivider label="The Experience • 01 / 09" />
 
-      {/* 02: The Night (Storytelling) */}
+      {/* 02: The Night (Experience & Music) */}
       <TheNight />
 
-      {/* Divider */}
-      <VintageDivider label="01 / 09 • DJ Virus" />
-
-      {/* 03: Event Details */}
+      {/* 03: Event Specifications Blueprint */}
       <EventDetails />
 
       {/* Divider */}
-      <VintageDivider label="River Atmosphere" />
+      <VintageDivider label="Tickets & Payment" />
 
-      {/* 04: Visual & Atmosphere Transition */}
-      <AtmosphereVisual />
-
-      {/* Divider */}
-      <VintageDivider label="Secure Your Spot" />
-
-      {/* 05: Payment Flow & Instructions */}
+      {/* 04: Payment Flow & Official Channels */}
       <PaymentInstructions />
 
-      {/* 06: Reservation Form (Primary Conversion) */}
+      {/* 05: Reservation Form (Primary Conversion) */}
       <ReservationForm />
 
       {/* Divider */}
       <VintageDivider label="Questions & WhatsApp" />
 
-      {/* 07: Direct Contact Actions */}
+      {/* 06: Direct Contact Actions (WhatsApp, Instagram, Call) */}
       <ContactActions />
 
-      {/* 08: Final Poster CTA */}
+      {/* 07: Final Poster Call to Action */}
       <FinalCTA />
 
-      {/* 09: Vintage Egyptian Poster Footer */}
+      {/* 08: Vintage Egyptian Poster Footer */}
       <Footer />
 
       {/* Sticky Mobile Reservation Trigger */}
