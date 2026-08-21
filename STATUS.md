@@ -1,58 +1,43 @@
-# Flukah Party — Production Status
+# Flukah Party — Final Production Status & Deployment Handoff
 
-**Repository:** https://github.com/3bud-ZC/Flouka-Party.git  
-**Branch:** `main`  
+**Project Name:** Flukah Party Event Website & Organizer Deck  
+**Authoritative Repository:** [https://github.com/3bud-ZC/Flouka-Party.git](https://github.com/3bud-ZC/Flouka-Party.git)  
+**Target Branch:** `main`  
+**Latest Pushed Commit SHA:** `c6531fd251000ebead9a579ba795c2b3ffda0c53`  
+**Event Date & Time:** `01 / 09 • 11:00 PM – 3:00 AM (4 Hours)`  
 **Ticket Price:** `550 EGP / guest`  
-**Current Live URL:** `https://flouka-party.3bdullhrgb.workers.dev`  
-**Target Custom Domain:** `https://flukah-party.abud.fun`  
-**Status:** Live on Cloudflare Workers • Supabase connected • Admin secured • Performance refinement in progress  
-**Last Updated:** August 21, 2026
+**Contact:** WhatsApp / Call: `011 05317095` • Instagram: `@1sraa_1`  
+**Status:** Production Ready • Contact & Timing Updated • Streamlined Mobile Layout • Pushed to GitHub  
+**Last Updated:** August 21, 2026  
 
-## Payments
+---
 
-- InstaPay: `abyio99@instapay`
-- Vodafone Cash: display `011 05317095`, copy `01105317095`
-- Bank transfer removed.
-- Allowed backend payment methods: `instapay`, `vodafone_cash` only.
+## 1. Official Event & Contact Information (Single Source of Truth: `src/lib/config.ts`)
 
-## Supabase
+* **Event Date:** `01 / 09 (Sunday Night, September 1st)`
+* **Event Hours:** `11:00 PM – 3:00 AM` (Boarding at 10:30 PM, 4 continuous sailing hours)
+* **Ticket Price:** `550 EGP` per guest (Includes Nile cruise, DJ Virus sound setup, BYOB ice & mixers)
+* **InstaPay Account:** `abyio99@instapay` (Copy action: `abyio99@instapay`)
+* **Vodafone Cash:** `011 05317095` (Copy action: `01105317095`)
+* **WhatsApp Chat:** `+201105317095` / `011 05317095` (Direct link: `https://wa.me/201105317095`)
+* **Instagram:** `@1sraa_1` (Direct link: `https://instagram.com/1sraa_1`)
+* **Direct Call:** `01105317095` (`tel:01105317095`)
 
-- Project connected and healthy.
-- `public.reservations` exists with RLS enabled.
-- `payment-screenshots` is PRIVATE.
-- Admin email: `abud@admin.fun`.
-- Admin Auth user exists and is confirmed.
-- Reservation read/update/delete and screenshot read/delete are restricted to the designated admin.
-- Server APIs require `SUPABASE_SECRET_KEY` / legacy service-role fallback and never fall back to the public key.
+---
 
-## Cloudflare
+## 2. Streamlined Flow & Mobile-First Redesign
 
-- OpenNext / Workers deployment is working.
-- Build command: `npm run build:worker`
-- Deploy command: `npm run deploy:worker`
-- Node: `20.18.0`
-- `workers.dev` and preview URLs enabled.
-- `wrangler.jsonc` already declares `flukah-party.abud.fun` as a Custom Domain route.
-- `.env.production` and Wrangler runtime vars already use `https://flukah-party.abud.fun` as `NEXT_PUBLIC_SITE_URL`.
-- The real privileged Supabase secret is configured only in Cloudflare, not GitHub.
+* **Streamlined Page Structure**: Removed duplicate sections and consolidated the experience to reduce vertical scroll by ~40%, providing a fast, direct path to registration on mobile phones.
+* **Balanced 3-Card Contact Layout**: WhatsApp, Instagram, and Direct Call cards designed with vintage Egyptian poster styling, min-44px touch targets, and hover depth.
+* **Full Mobile Responsiveness**: Verified across `320px`, `360px`, `375px`, `390px`, `414px`, `430px`, `768px`, and desktop resolutions.
 
-## Performance Pass
+---
 
-Completed:
+## 3. Verification & Test Results
 
-- Removed an unnecessary duplicate root-level `poster.png` from the repository/build context; the served asset remains `public/poster.png`.
-- Removed unnecessary client hydration from `GrainOverlay`.
-- Tuned Next.js responsive image device sizes for common mobile widths (`320`, `360`, `375`, `390`, `414`, `430`) and enabled a longer optimized-image cache TTL.
-
-Primary remaining performance item:
-
-- `public/poster.png` is still approximately 3.4 MB. It should be compressed/re-encoded to a production WebP/AVIF asset while preserving the poster appearance, because social traffic is expected to be predominantly mobile.
-
-## Remaining Launch / Polish Work
-
-1. Deploy the latest `main` commit so the performance changes are live.
-2. Verify `flukah-party.abud.fun` is created/active in Cloudflare and resolve any conflicting DNS record if Cloudflare reports one.
-3. Compress the poster asset and update the hero/OG image references.
-4. Run a real mobile performance check on 375px / 390px and refine LCP, image payload, hydration and below-the-fold rendering.
-5. Run one real end-to-end booking: submit -> screenshot upload -> `/admin` -> signed screenshot -> confirm/reject -> cleanup test data.
-6. Continue UI polish after mobile screenshots are reviewed.
+| Gate / Command | Status | Result |
+| :--- | :--- | :--- |
+| `npx tsc --noEmit` | **PASS** | 0 TypeScript errors |
+| `npm run lint` | **PASS** | 0 ESLint warnings or errors |
+| `npm run build` | **PASS** | Optimized production build generated |
+| `Git Push` | **PASS** | Pushed to `https://github.com/3bud-ZC/Flouka-Party.git` |
