@@ -3,7 +3,7 @@ import "./globals.css";
 import GrainOverlay from "@/components/GrainOverlay";
 
 export const viewport: Viewport = {
-  themeColor: "#EFE6D5",
+  themeColor: "#D95338",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -48,7 +48,12 @@ export const metadata: Metadata = {
     images: ["/poster.png"],
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
   },
 };
 
